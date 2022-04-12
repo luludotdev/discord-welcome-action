@@ -11,5 +11,5 @@ jobs:
       - name: Run Action
         uses: ./
         with:
-          token: ${{ secrets.DISCORD_TOKEN }}
           content: ./test-content
+          discord-token: ${{ secrets.DISCORD_TOKEN }}

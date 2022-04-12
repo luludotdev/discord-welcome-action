@@ -5,7 +5,7 @@ import { isDirectory } from './fs'
 import { parseMarkdown } from './parse'
 
 const run = async () => {
-  const token = core.getInput('token')
+  const token = core.getInput('discord-token')
   const contentPath = core.getInput('content')
 
   const isDir = await isDirectory(contentPath)
