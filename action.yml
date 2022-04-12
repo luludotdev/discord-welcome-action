@@ -1,0 +1,13 @@
+name: Discord Welcome
+description: Keep channel content in-sync with Markdown based templates
+inputs:
+  discord-token:
+    required: true
+    description: Discord Bot Login Token
+  content:
+    required: true
+    description: Path to a directory containing template documents
+    default: ./content
+runs:
+  using: node16
+  main: dist/index.js
