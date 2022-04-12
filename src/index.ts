@@ -1,11 +1,13 @@
 import * as core from '@actions/core'
 import { readdir as readDir } from 'fs/promises'
 import { join as joinPath } from 'path'
+import { inspect } from 'util'
 import { isDirectory } from './fs'
 import { parseMarkdown } from './parse'
 
 const run = async () => {
-  const token = core.getInput('discord-token')
+  // TODO
+  // const token = core.getInput('discord-token')
   const contentPath = core.getInput('content')
 
   const isDir = await isDirectory(contentPath)
@@ -25,7 +27,7 @@ const run = async () => {
     .map(async path => parseMarkdown(path))
 
   const files = await Promise.all(jobs)
-  console.log(files)
+  console.log(inspect(files, true, null))
   // TODO
 }
 
