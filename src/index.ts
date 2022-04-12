@@ -1,5 +1,8 @@
 import core from '@actions/core'
-import { isDirectory, isDirEmpty } from './fs'
+import { readdir as readDir } from 'fs/promises'
+import { join as joinPath } from 'path'
+import { isDirectory } from './fs'
+import { parseMarkdown } from './parse'
 
 const run = async () => {
   const token = core.getInput('token')
@@ -11,14 +14,18 @@ const run = async () => {
     return
   }
 
-  const isEmpty = await isDirEmpty(contentPath)
-  if (isEmpty) {
+  const paths = await readDir(contentPath)
+  if (paths.length === 0) {
     core.warning('No template files were found in the specified directory')
     return
   }
 
+  const jobs = paths
+    .map(file => joinPath(contentPath, file))
+    .map(async path => parseMarkdown(path))
+
+  const files = await Promise.all(jobs)
   // TODO
-  void 0
 }
 
 void run().catch(error => core.setFailed(error))
