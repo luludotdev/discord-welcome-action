@@ -42,4 +42,4 @@ node_modules
 .vscode
 
 # Built Files
-build/
+lib/
