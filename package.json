@@ -6,6 +6,8 @@
   "private": true,
   "license": "APACHE-2.0",
   "scripts": {
+    "lint": "xo ./src",
+    "test": "yarn run lint",
     "compile": "tsc",
     "build": "yarn run compile",
     "dev": "yarn run compile --watch",
@@ -17,6 +19,7 @@
   "devDependencies": {
     "@types/node": "^17.0.23",
     "@vercel/ncc": "^0.33.4",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "xo": "^0.48.0"
   }
 }
