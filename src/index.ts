@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import { readdir as readDir } from 'fs/promises'
 import { join as joinPath } from 'path'
 import { inspect } from 'util'
+import { AnnotatedError } from './error'
 import { isDirectory } from './fs'
 import { parseMarkdown } from './parse'
 import { type ChannelData } from './send'
@@ -30,32 +31,37 @@ const run = async () => {
   const files = await Promise.all(jobs)
   const data = files.map(({ path, meta, messages }) => {
     const { senderName, senderImage, channel: channelID } = meta
-    const parseError = new Error('Failed to parse template(s)')
 
     if (typeof channelID === 'undefined' || channelID === null) {
-      core.error('Frontmatter key `channel` is missing!', { file: path })
-      throw parseError
+      throw new AnnotatedError(
+        'Failed to parse template!',
+        'Frontmatter key `channel` is missing!',
+        { file: path }
+      )
     }
 
     if (typeof channelID !== 'string') {
-      core.error('Frontmatter key `channel` must be a string!', { file: path })
-      throw parseError
+      throw new AnnotatedError(
+        'Failed to parse template!',
+        'Frontmatter key `channel` must be a string!',
+        { file: path }
+      )
     }
 
     if (typeof senderName !== 'string' && typeof senderName !== 'undefined') {
-      core.error('Frontmatter key `senderName` must be a string!', {
-        file: path,
-      })
-
-      throw parseError
+      throw new AnnotatedError(
+        'Failed to parse template!',
+        'Frontmatter key `senderName` must be a string!',
+        { file: path }
+      )
     }
 
     if (typeof senderImage !== 'string' && typeof senderImage !== 'undefined') {
-      core.error('Frontmatter key `senderImage` must be a string!', {
-        file: path,
-      })
-
-      throw parseError
+      throw new AnnotatedError(
+        'Failed to parse template!',
+        'Frontmatter key `senderImage` must be a string!',
+        { file: path }
+      )
     }
 
     const data: ChannelData = {
@@ -71,4 +77,14 @@ const run = async () => {
   console.log(inspect(data, true, null))
 }
 
-void run().catch(error => core.setFailed(error))
+void run().catch((error: unknown) => {
+  if (error instanceof AnnotatedError) {
+    core.error(error.annotation, error.properties)
+    core.setFailed(error.message)
+
+    return
+  }
+
+  if (typeof error === 'string' || error instanceof Error) core.setFailed(error)
+  else core.setFailed('An unknown error occurred!')
+})
