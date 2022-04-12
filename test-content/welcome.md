@@ -1,7 +1,5 @@
 ---
 channel: '419933656736333835'
-senderName: Welcome
-senderImage: image
 ---
 ![Banner Image](https://files.lulu.dev/Yn8b6efSEZvb.png)
 ---
