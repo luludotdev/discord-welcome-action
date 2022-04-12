@@ -73,7 +73,8 @@ interface WebhookData extends ChannelData {
   webhook: WebhookClient
   channel: TextChannel
   senderName: string
-  viewChannelPerm: boolean | undefined | undefined
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  viewChannelPerm: boolean | null | undefined
 }
 
 const resolveWebhooks: (
@@ -131,7 +132,7 @@ const resolveWebhooks: (
     const overwrites = channel.permissionOverwrites.cache.get(channel.guild.id)!
     const allowed = overwrites.allow.has('VIEW_CHANNEL')
     const denied = overwrites.deny.has('VIEW_CHANNEL')
-    const viewChannelPerm = !allowed && !denied ? undefined : allowed
+    const viewChannelPerm = !allowed && !denied ? null : allowed
 
     const webhook = new WebhookClient({ id: rawHook.id, token: rawHook.token! })
     hookData.push({
