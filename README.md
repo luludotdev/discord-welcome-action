@@ -1,0 +1,2 @@
+# Discord Welcome Action [![Node.js CI](https://github.com/lolPants/discord-welcome-action/actions/workflows/ci.yml/badge.svg)](https://github.com/lolPants/discord-welcome-action/actions/workflows/ci.yml) [![Action Test](https://github.com/lolPants/discord-welcome-action/actions/workflows/test.yml/badge.svg)](https://github.com/lolPants/discord-welcome-action/actions/workflows/test.yml)
+> Action to keep channel content in-sync with Markdown based templates
