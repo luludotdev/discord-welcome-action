@@ -25,6 +25,7 @@ const run = async () => {
     .map(async path => parseMarkdown(path))
 
   const files = await Promise.all(jobs)
+  console.log(files)
   // TODO
 }
 
