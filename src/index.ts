@@ -22,6 +22,7 @@ const run = async () => {
     return
   }
 
+  core.startGroup('Parse Step')
   const jobs = paths
     .map(file => joinPath(contentPath, file))
     .map(async path => parseMarkdown(path))
@@ -71,10 +72,15 @@ const run = async () => {
       senderImage,
     }
 
+    core.info(`Successfully parsed \`${path}\``)
     return data
   })
 
+  core.endGroup()
+  core.startGroup('Send Step')
+
   await sendMessages(token, ...data)
+  core.endGroup()
 }
 
 void run().catch((error: unknown) => {

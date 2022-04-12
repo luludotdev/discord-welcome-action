@@ -1,8 +1,10 @@
+import * as core from '@actions/core'
 import {
   Client,
   Intents,
   MessageAttachment,
   TextChannel,
+  Util,
   WebhookClient,
 } from 'discord.js'
 import { parse } from 'path'
@@ -41,12 +43,15 @@ export const sendMessages: (
 
   await login()
 
+  const tag = client.user?.tag ?? 'Unknown#0000'
+  core.info(`Logged in as ${tag}`)
+
   try {
     const webhookData = await resolveWebhooks(client, ...data)
     try {
       /* eslint-disable no-await-in-loop */
       for (const entry of webhookData) {
-        await sendEntry(entry)
+        const count = await sendEntry(entry)
 
         const { channel, viewChannelPerm } = entry
         if (viewChannelPerm !== false) {
@@ -57,6 +62,10 @@ export const sendMessages: (
             }
           )
         }
+
+        core.info(
+          `Sent ${count} message(s) to #${channel.name} in ${channel.guild.name}`
+        )
       }
       /* eslint-enable no-await-in-loop */
     } finally {
@@ -164,12 +173,14 @@ const resolveWebhooks: (
   return hookData
 }
 
-const sendEntry: (entry: WebhookData) => Promise<void> = async ({
+const sendEntry: (entry: WebhookData) => Promise<number> = async ({
+  path: file,
   webhook,
   messages,
   senderName,
   senderImage,
 }) => {
+  let count = 0
   for (const message of messages) {
     /* eslint-disable no-await-in-loop */
     switch (message.type) {
@@ -186,15 +197,25 @@ const sendEntry: (entry: WebhookData) => Promise<void> = async ({
           avatarURL: senderImage,
         })
 
+        count += 1
         break
       }
 
       case 'text': {
-        await webhook.send({
-          content: message.content,
-          username: senderName,
-          avatarURL: senderImage,
-        })
+        const split = Util.splitMessage(message.content, { maxLength: 1950 })
+        if (split.length > 1) {
+          core.warning('A message was split due to max length constraints', {
+            file,
+          })
+        }
+
+        for (const chunk of split) {
+          await webhook.send({
+            content: chunk,
+            username: senderName,
+            avatarURL: senderImage,
+          })
+        }
 
         break
       }
@@ -207,4 +228,6 @@ const sendEntry: (entry: WebhookData) => Promise<void> = async ({
     }
     /* eslint-enable no-await-in-loop */
   }
+
+  return count
 }
