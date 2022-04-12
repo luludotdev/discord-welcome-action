@@ -1,7 +1,10 @@
 {
   "name": "discord-welcome-action",
   "packageManager": "yarn@3.2.0",
+  "repository": "git@github.com:lolPants/discord-welcome-action.git",
+  "author": "Jack Baron <jackmbaron@gmail.com>",
   "private": true,
+  "license": "APACHE-2.0",
   "scripts": {
     "compile": "tsc",
     "build": "yarn run compile",
