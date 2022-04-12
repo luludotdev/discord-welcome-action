@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.6.0",
+    "discord.js": "^13.6.0",
     "yaml": "^2.0.0"
   },
   "devDependencies": {

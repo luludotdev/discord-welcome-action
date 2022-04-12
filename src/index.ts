@@ -1,15 +1,13 @@
 import * as core from '@actions/core'
 import { readdir as readDir } from 'fs/promises'
 import { join as joinPath } from 'path'
-import { inspect } from 'util'
 import { AnnotatedError } from './error'
 import { isDirectory } from './fs'
 import { parseMarkdown } from './parse'
-import { type ChannelData } from './send'
+import { type ChannelData, sendMessages } from './send'
 
 const run = async () => {
-  // TODO
-  // const token = core.getInput('discord-token')
+  const token = core.getInput('discord-token')
   const contentPath = core.getInput('content')
 
   const isDir = await isDirectory(contentPath)
@@ -29,7 +27,7 @@ const run = async () => {
     .map(async path => parseMarkdown(path))
 
   const files = await Promise.all(jobs)
-  const data = files.map(({ path, meta, messages }) => {
+  const data = files.map(({ path, filename, meta, messages }) => {
     const { senderName, senderImage, channel: channelID } = meta
 
     if (typeof channelID === 'undefined' || channelID === null) {
@@ -65,6 +63,8 @@ const run = async () => {
     }
 
     const data: ChannelData = {
+      path,
+      filename,
       channelID,
       messages,
       senderName,
@@ -74,7 +74,7 @@ const run = async () => {
     return data
   })
 
-  console.log(inspect(data, true, null))
+  await sendMessages(token, ...data)
 }
 
 void run().catch((error: unknown) => {
