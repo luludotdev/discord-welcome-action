@@ -1,5 +1,5 @@
 import { type PathLike } from 'fs'
-import { lstat, stat } from 'fs/promises'
+import { lstat, readdir, stat } from 'fs/promises'
 
 export const exists: (path: PathLike) => Promise<boolean> = async path => {
   try {
@@ -17,4 +17,9 @@ export const isDirectory: (path: PathLike) => Promise<boolean> = async path => {
   } catch {
     return false
   }
+}
+
+export const isDirEmpty: (path: PathLike) => Promise<boolean> = async path => {
+  const files = await readdir(path)
+  return files.length === 0
 }
