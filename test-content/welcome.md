@@ -8,3 +8,9 @@ Test for `lolPants/discord-welcome-action`
 * A
 * B
 * C
+---
+**__Second message!__**
+
+```js
+// With cool formatting
+```
