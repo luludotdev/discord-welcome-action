@@ -3,17 +3,12 @@ import { parse } from 'path'
 import yaml from 'yaml'
 import { exists } from './fs'
 
-interface MessageCommon {
-  path: string
-  filename: string
-}
-
-export interface TextMessage extends MessageCommon {
+export interface TextMessage {
   type: 'text'
   content: string
 }
 
-export interface ImageMessage extends MessageCommon {
+export interface ImageMessage {
   type: 'image'
   caption: string
   url: string
@@ -21,6 +16,9 @@ export interface ImageMessage extends MessageCommon {
 
 export type Message = TextMessage | ImageMessage
 export interface ParseResult {
+  path: string
+  filename: string
+
   meta: Readonly<Record<string, unknown>>
   messages: readonly Message[]
 }
@@ -38,44 +36,37 @@ export const parseMarkdown: (
     .map(line => line.trim())
     .filter(line => line !== '')
 
-  const common: MessageCommon = {
-    path,
-    filename: parse(path).base,
-  }
-
   const meta = yaml.parse(frontmatter) as Record<string, unknown>
   const messages = chunks
-    .map(line => parseImageMessage(common, line))
-    .map(line => translateBulletPoints(common, line))
-    .map(line => parseTextLine(common, line))
+    .map(line => parseImageMessage(line))
+    .map(line => translateBulletPoints(line))
+    .map(line => parseTextLine(line))
 
-  return { meta, messages }
+  const filename = parse(path).base
+  return { path, filename, meta, messages }
 }
 
-type ParserFn = (
-  common: MessageCommon,
-  line: string | Message
-) => string | Message
+type ParserFn = (line: string | Message) => string | Message
 type FinalParserFn = (...parameters: Parameters<ParserFn>) => Message
 
 const IMAGE_RX = /^!\[(.*)]\((.+)\)$/
-const parseImageMessage: ParserFn = (common, line) => {
+const parseImageMessage: ParserFn = line => {
   if (typeof line !== 'string') return line
 
   const matches = IMAGE_RX.exec(line)
   if (matches === null) return line
 
   const [, caption, url] = matches
-  return { ...common, type: 'image', caption, url }
+  return { type: 'image', caption, url }
 }
 
 const BULLET_RX = /^[*-] /gm
-const translateBulletPoints: ParserFn = (_, line) => {
+const translateBulletPoints: ParserFn = line => {
   if (typeof line !== 'string') return line
   return line.replace(BULLET_RX, '• ')
 }
 
-const parseTextLine: FinalParserFn = (common, line) => {
+const parseTextLine: FinalParserFn = line => {
   if (typeof line !== 'string') return line
-  return { ...common, type: 'text', content: line }
+  return { type: 'text', content: line }
 }

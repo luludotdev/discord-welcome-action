@@ -4,6 +4,7 @@ import { join as joinPath } from 'path'
 import { inspect } from 'util'
 import { isDirectory } from './fs'
 import { parseMarkdown } from './parse'
+import { type ChannelData } from './send'
 
 const run = async () => {
   // TODO
@@ -27,8 +28,47 @@ const run = async () => {
     .map(async path => parseMarkdown(path))
 
   const files = await Promise.all(jobs)
-  console.log(inspect(files, true, null))
-  // TODO
+  const data = files.map(({ path, meta, messages }) => {
+    const { senderName, senderImage, channel: channelID } = meta
+    const parseError = new Error('Failed to parse template(s)')
+
+    if (typeof channelID === 'undefined' || channelID === null) {
+      core.error('Frontmatter key `channel` is missing!', { file: path })
+      throw parseError
+    }
+
+    if (typeof channelID !== 'string') {
+      core.error('Frontmatter key `channel` must be a string!', { file: path })
+      throw parseError
+    }
+
+    if (typeof senderName !== 'string' && typeof senderName !== 'undefined') {
+      core.error('Frontmatter key `senderName` must be a string!', {
+        file: path,
+      })
+
+      throw parseError
+    }
+
+    if (typeof senderImage !== 'string' && typeof senderImage !== 'undefined') {
+      core.error('Frontmatter key `senderImage` must be a string!', {
+        file: path,
+      })
+
+      throw parseError
+    }
+
+    const data: ChannelData = {
+      channelID,
+      messages,
+      senderName,
+      senderImage,
+    }
+
+    return data
+  })
+
+  console.log(inspect(data, true, null))
 }
 
 void run().catch(error => core.setFailed(error))
