@@ -1,4 +1,4 @@
-import core from '@actions/core'
+import * as core from '@actions/core'
 import { readdir as readDir } from 'fs/promises'
 import { join as joinPath } from 'path'
 import { isDirectory } from './fs'
