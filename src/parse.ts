@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises'
-import { parse } from 'path'
+import { join, parse } from 'path'
 import yaml from 'yaml'
 import { exists } from './fs'
 
@@ -38,35 +38,44 @@ export const parseMarkdown: (
 
   const meta = yaml.parse(frontmatter) as Record<string, unknown>
   const messages = chunks
-    .map(line => parseImageMessage(line))
-    .map(line => translateBulletPoints(line))
-    .map(line => parseTextLine(line))
+    .map(line => parseImageMessage(path, line))
+    .map(line => translateBulletPoints(path, line))
+    .map(line => parseTextLine(path, line))
 
   const filename = parse(path).base
   return { path, filename, meta, messages }
 }
 
-type ParserFn = (line: string | Message) => string | Message
+type ParserFn = (path: string, line: string | Message) => string | Message
 type FinalParserFn = (...parameters: Parameters<ParserFn>) => Message
 
 const IMAGE_RX = /^!\[(.*)]\((.+)\)$/
-const parseImageMessage: ParserFn = line => {
+const parseImageMessage: ParserFn = (path, line) => {
   if (typeof line !== 'string') return line
 
   const matches = IMAGE_RX.exec(line)
   if (matches === null) return line
 
   const [, caption, url] = matches
-  return { type: 'image', caption, url }
+  const isHttp = url.toLowerCase().startsWith('http://')
+  const isHttps = url.toLowerCase().startsWith('https://')
+  if (isHttp || isHttps) {
+    return { type: 'image', caption, url }
+  }
+
+  const { dir } = parse(path)
+  const imagePath = join(dir, url)
+
+  return { type: 'image', caption, url: imagePath }
 }
 
 const BULLET_RX = /^[*-] /gm
-const translateBulletPoints: ParserFn = line => {
+const translateBulletPoints: ParserFn = (_, line) => {
   if (typeof line !== 'string') return line
   return line.replace(BULLET_RX, '• ')
 }
 
-const parseTextLine: FinalParserFn = line => {
+const parseTextLine: FinalParserFn = (_, line) => {
   if (typeof line !== 'string') return line
   return { type: 'text', content: line }
 }

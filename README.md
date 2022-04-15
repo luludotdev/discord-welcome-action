@@ -15,7 +15,7 @@
 ### Markdown Syntax
 Template documents can make use of any Markdown syntax that Discord directly supports, as templates are sent almost verbatim to the target channels. You can also use `---` (horizontal rules) to break up the document into multiple messages, otherwise messages will be split automatically.
 
-Images will also be embedded correctly, however **these must use absolute URLs, relative image URLs are currently unsupported.** Images must also be in a message of their own to be parsed correctly.
+Images will also be embedded correctly, however **images must be in a message of their own to be parsed correctly.**
 
 Finally, bulleted lists will be transformed to use the Unicode bullet character.
 
