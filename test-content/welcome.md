@@ -1,7 +1,7 @@
 ---
 channel: '963550442300796958'
 ---
-![Banner Image](https://files.lulu.dev/Yn8b6efSEZvb.png)
+![Relative Banner Image](./banner.png)
 ---
 Test for `lolPants/discord-welcome-action`
 
@@ -14,3 +14,5 @@ Test for `lolPants/discord-welcome-action`
 ```js
 // With cool formatting
 ```
+---
+![Absolute Image](https://files.lulu.dev/Br-eb0mR2Q0e.png)
