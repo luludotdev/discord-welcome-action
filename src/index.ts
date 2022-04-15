@@ -7,8 +7,8 @@ import { parseMarkdown } from './parse'
 import { type ChannelData, sendMessages } from './send'
 
 const run = async () => {
-  const token = core.getInput('discord-token')
-  const contentPath = core.getInput('content')
+  const token = core.getInput('discord-token', { required: true })
+  const contentPath = core.getInput('content', { required: true })
 
   const isDir = await isDirectory(contentPath)
   if (!isDir) {
