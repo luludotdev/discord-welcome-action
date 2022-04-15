@@ -24,6 +24,7 @@ const run = async () => {
 
   core.startGroup('Parse Step')
   const jobs = paths
+    .filter(file => file.toLowerCase().endsWith('.md'))
     .map(file => joinPath(contentPath, file))
     .map(async path => parseMarkdown(path))
 
