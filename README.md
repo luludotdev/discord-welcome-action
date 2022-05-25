@@ -5,8 +5,6 @@
 This action is tested on every push with a [Test Workflow](https://github.com/lolPants/discord-welcome-action/actions/workflows/test.yml) to ensure things function as expected.
 However it has not been extensively battle-tested with many different inputs and configurations so please report any issues you may find.
 
-Once the action matures and is more extensively tested it will be promoted from `v0` to `v1`.
-
 ## Prerequisites
 * A Discord Bot with `Manage Webhooks` and `Manage Messages` permissions in the target server(s)
 * One or more Markdown template documents using the extended syntax (see below)
@@ -50,7 +48,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Update Welcome
-        uses: lolPants/discord-welcome-action@v0
+        uses: lolPants/discord-welcome-action@v1
         with:
           content: ./content
           discord-token: ${{ secrets.DISCORD_TOKEN }}
