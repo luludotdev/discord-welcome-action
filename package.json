@@ -1,6 +1,6 @@
 {
   "name": "discord-welcome-action",
-  "packageManager": "yarn@3.2.0",
+  "packageManager": "yarn@3.2.1",
   "repository": "git@github.com:lolPants/discord-welcome-action.git",
   "author": "Jack Baron <jackmbaron@gmail.com>",
   "private": true,
