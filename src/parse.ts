@@ -14,7 +14,11 @@ export interface ImageMessage {
   url: string
 }
 
-export type Message = TextMessage | ImageMessage
+export interface BreakMessage {
+  type: 'break'
+}
+
+export type Message = TextMessage | ImageMessage | BreakMessage
 export interface ParseResult {
   path: string
   filename: string
@@ -38,6 +42,7 @@ export const parseMarkdown: (
 
   const meta = yaml.parse(frontmatter) as Record<string, unknown>
   const messages = chunks
+    .map(line => parseBreakMessage(path, line))
     .map(line => parseImageMessage(path, line))
     .map(line => translateBulletPoints(path, line))
     .map(line => parseTextLine(path, line))
@@ -48,6 +53,15 @@ export const parseMarkdown: (
 
 type ParserFn = (path: string, line: string | Message) => string | Message
 type FinalParserFn = (...parameters: Parameters<ParserFn>) => Message
+
+const parseBreakMessage: ParserFn = (path, line) => {
+  if (typeof line !== 'string') return line
+  if (line === '::break') {
+    return { type: 'break' }
+  }
+
+  return line
+}
 
 const IMAGE_RX = /^!\[(.*)]\((.+)\)$/
 const parseImageMessage: ParserFn = (path, line) => {

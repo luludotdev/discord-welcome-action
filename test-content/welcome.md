@@ -9,6 +9,8 @@ Test for `lolPants/discord-welcome-action`
 * B
 * C
 ---
+::break
+---
 **__Second message!__**
 
 ```js

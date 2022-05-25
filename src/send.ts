@@ -220,6 +220,10 @@ const sendEntry: (entry: WebhookData) => Promise<number> = async ({
         break
       }
 
+      case 'break':
+        // TODO: Implement
+        break
+
       default: {
         // @ts-expect-error usage of `never` type
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
