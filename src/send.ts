@@ -3,6 +3,7 @@ import {
   Client,
   Intents,
   MessageAttachment,
+  MessageEmbed,
   TextChannel,
   Util,
   WebhookClient,
@@ -220,9 +221,18 @@ const sendEntry: (entry: WebhookData) => Promise<number> = async ({
         break
       }
 
-      case 'break':
-        // TODO: Implement
+      case 'break': {
+        const embed = new MessageEmbed({ description: '-' })
+
+        await webhook.send({
+          embeds: [embed],
+          username: senderName,
+          avatarURL: senderImage,
+          flags: ['SUPPRESS_EMBEDS'],
+        })
+
         break
+      }
 
       default: {
         // @ts-expect-error usage of `never` type
