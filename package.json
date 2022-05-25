@@ -8,7 +8,8 @@
   "scripts": {
     "postinstall": "husky install",
     "lint": "xo ./src",
-    "test": "yarn run lint",
+    "check": "yarn run compile --noEmit",
+    "test": "yarn run check && yarn run lint",
     "compile": "tsc",
     "build": "yarn run compile",
     "dev": "yarn run compile --watch",
