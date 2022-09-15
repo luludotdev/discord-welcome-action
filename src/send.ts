@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import { splitMessage } from '@lolpants/splitmessage'
 import {
   AttachmentBuilder,
   Client,
@@ -10,7 +11,6 @@ import {
 import { parse } from 'node:path'
 import { AnnotatedError } from './error.js'
 import { type Message } from './parse.js'
-import { splitMessage } from './split.js'
 
 export interface ChannelData {
   path: string

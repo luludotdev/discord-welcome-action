@@ -142,6 +142,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lolpants/splitmessage@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@lolpants/splitmessage@npm:0.2.0"
+  checksum: 4b15182505c47fecec173506f93366f98a7e16f1cd3afedf7ac361096b64e3b202f1e5b2c0973c1542adc95632fb0e41223d65b543a8a2462f7c2614d8ab740e
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -979,6 +986,7 @@ __metadata:
   resolution: "discord-welcome-action@workspace:."
   dependencies:
     "@actions/core": ^1.9.1
+    "@lolpants/splitmessage": ^0.2.0
     "@types/node": ^18.7.18
     "@vercel/ncc": ^0.34.0
     discord.js: ^14.3.0
