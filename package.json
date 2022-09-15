@@ -13,7 +13,8 @@
     "compile": "tsc",
     "build": "yarn run compile",
     "dev": "yarn run compile --watch",
-    "package": "ncc build ./src/index.ts --minify --source-map --license licenses.txt"
+    "package": "ncc build ./src/index.ts --minify --source-map --license licenses.txt",
+    "dist": "yarn run test && yarn run package"
   },
   "engines": {
     "node": ">=16"
