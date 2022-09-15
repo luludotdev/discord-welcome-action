@@ -1,7 +1,7 @@
-import { readFile } from 'fs/promises'
-import { join, parse } from 'path'
+import { readFile } from 'node:fs/promises'
+import { join, parse } from 'node:path'
 import yaml from 'yaml'
-import { exists } from './fs'
+import { exists } from './fs.js'
 
 export interface TextMessage {
   type: 'text'

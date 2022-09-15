@@ -1,16 +1,16 @@
 import * as core from '@actions/core'
 import {
+  AttachmentBuilder,
   Client,
-  Intents,
-  MessageAttachment,
-  MessageEmbed,
+  EmbedBuilder,
+  IntentsBitField as Intents,
   TextChannel,
-  Util,
   WebhookClient,
 } from 'discord.js'
-import { parse } from 'path'
-import { AnnotatedError } from './error'
-import { type Message } from './parse'
+import { parse } from 'node:path'
+import { AnnotatedError } from './error.js'
+import { type Message } from './parse.js'
+import { splitMessage } from './split.js'
 
 export interface ChannelData {
   path: string
@@ -28,7 +28,7 @@ export const sendMessages: (
   ...data: ChannelData[]
 ) => Promise<void> = async (token, ...data) => {
   const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_WEBHOOKS],
+    intents: [Intents.Flags.Guilds, Intents.Flags.GuildWebhooks],
   })
 
   const login: () => Promise<void> = async () =>
@@ -59,7 +59,7 @@ export const sendMessages: (
           await channel.permissionOverwrites.edit(
             channel.guild.roles.everyone,
             {
-              VIEW_CHANNEL: viewChannelPerm,
+              ViewChannel: viewChannelPerm,
             }
           )
         }
@@ -116,7 +116,7 @@ const resolveWebhooks: (
 
     const isPublicChannel = channel
       .permissionsFor(channel.guild.roles.everyone)
-      ?.has('SEND_MESSAGES')
+      ?.has('SendMessages')
 
     if (isPublicChannel) {
       throw new AnnotatedError(
@@ -127,21 +127,22 @@ const resolveWebhooks: (
     }
 
     const webhooks = await channel.fetchWebhooks()
-    const rawHook = webhooks.first() ?? (await channel.createWebhook('Welcome'))
+    const rawHook =
+      webhooks.first() ?? (await channel.createWebhook({ name: 'Welcome' }))
 
     const senderName = entry.senderName ?? channel.guild.name
     const senderImage =
       entry.senderImage ??
       channel.guild.iconURL({
-        format: 'png',
-        dynamic: false,
+        extension: 'png',
+        forceStatic: true,
         size: 2048,
       }) ??
       undefined
 
     const overwrites = channel.permissionOverwrites.cache.get(channel.guild.id)!
-    const allowed = overwrites.allow.has('VIEW_CHANNEL')
-    const denied = overwrites.deny.has('VIEW_CHANNEL')
+    const allowed = overwrites.allow.has('ViewChannel')
+    const denied = overwrites.deny.has('ViewChannel')
     const viewChannelPerm = !allowed && !denied ? null : allowed
 
     const webhook = new WebhookClient({ id: rawHook.id, token: rawHook.token! })
@@ -160,7 +161,7 @@ const resolveWebhooks: (
   for (const { channel, viewChannelPerm } of hookData) {
     if (viewChannelPerm !== false) {
       await channel.permissionOverwrites.edit(channel.guild.roles.everyone, {
-        VIEW_CHANNEL: false,
+        ViewChannel: false,
       })
     }
 
@@ -187,10 +188,9 @@ const sendEntry: (entry: WebhookData) => Promise<number> = async ({
     switch (message.type) {
       case 'image': {
         const { ext } = parse(message.url)
-        const image = new MessageAttachment(
-          message.url,
-          `${message.caption}${ext}`
-        )
+        const image = new AttachmentBuilder(message.url, {
+          name: `${message.caption}${ext}`,
+        })
 
         await webhook.send({
           files: [image],
@@ -203,7 +203,7 @@ const sendEntry: (entry: WebhookData) => Promise<number> = async ({
       }
 
       case 'text': {
-        const split = Util.splitMessage(message.content, { maxLength: 1950 })
+        const split = splitMessage(message.content, { maxLength: 1950 })
         if (split.length > 1) {
           core.warning('A message was split due to max length constraints', {
             file,
@@ -222,13 +222,13 @@ const sendEntry: (entry: WebhookData) => Promise<number> = async ({
       }
 
       case 'break': {
-        const embed = new MessageEmbed({ description: '-' })
+        const embed = new EmbedBuilder({ description: '-' })
 
         await webhook.send({
           embeds: [embed],
           username: senderName,
           avatarURL: senderImage,
-          flags: ['SUPPRESS_EMBEDS'],
+          flags: ['SuppressEmbeds'],
         })
 
         break
@@ -236,7 +236,7 @@ const sendEntry: (entry: WebhookData) => Promise<number> = async ({
 
       default: {
         // @ts-expect-error usage of `never` type
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
         throw new Error(`unhandled message type: ${message.type}`)
       }
     }

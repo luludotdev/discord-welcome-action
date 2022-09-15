@@ -1,10 +1,10 @@
 import * as core from '@actions/core'
-import { readdir as readDir } from 'fs/promises'
-import { join as joinPath } from 'path'
-import { AnnotatedError } from './error'
-import { isDirectory } from './fs'
-import { parseMarkdown } from './parse'
-import { type ChannelData, sendMessages } from './send'
+import { readdir as readDir } from 'node:fs/promises'
+import { join as joinPath } from 'node:path'
+import { AnnotatedError } from './error.js'
+import { isDirectory } from './fs.js'
+import { parseMarkdown } from './parse.js'
+import { type ChannelData, sendMessages } from './send.js'
 
 const run = async () => {
   const token = core.getInput('discord-token', { required: true })
