@@ -10,31 +10,27 @@
     "lint": "prettier --check . && eslint src --ext mjs,js,ts",
     "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
     "fmt": "yarn run format",
-    "check": "yarn run compile --noEmit",
-    "test": "yarn run check && yarn run lint",
-    "compile": "tsc",
+    "test": "yarn run lint",
     "dev": "yarn run tsc --watch",
     "clean": "rimraf dist",
-    "package": "ncc build ./src/index.ts --minify --source-map --license licenses.txt",
-    "dist": "yarn run test && yarn run clean && yarn run package"
+    "package": "yarn run clean && tsup",
+    "dist": "yarn run test && yarn run package"
   },
   "engines": {
-    "node": ">=16"
-  },
-  "dependencies": {
-    "@actions/core": "^1.9.1",
-    "@lolpants/splitmessage": "^0.2.0",
-    "discord.js": "^14.3.0",
-    "yaml": "^2.1.1"
+    "node": ">=16.9.0"
   },
   "devDependencies": {
+    "@actions/core": "^1.9.1",
+    "@lolpants/splitmessage": "^0.2.0",
     "@types/node": "^18.7.18",
-    "@vercel/ncc": "^0.34.0",
+    "discord.js": "^14.3.0",
     "eslint": "^8.23.1",
     "eslint-config-neon": "^0.1.33",
     "husky": "^8.0.1",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.8.3"
+    "tsup": "^6.2.3",
+    "typescript": "^4.8.3",
+    "yaml": "^2.1.1"
   }
 }
