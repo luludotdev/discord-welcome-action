@@ -1,13 +1,14 @@
-import { type AnnotationProperties } from '@actions/core'
+import type { AnnotationProperties } from '@actions/core'
 
 export class AnnotatedError extends Error {
   public readonly annotation: string
+
   public readonly properties: Readonly<AnnotationProperties>
 
-  constructor(
+  public constructor(
     failure: string,
     annotation: string,
-    properties: AnnotationProperties
+    properties: AnnotationProperties,
   ) {
     super(failure)
 

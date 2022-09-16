@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { join, parse } from 'node:path'
 import yaml from 'yaml'
+import { AnnotatedError } from './error.js'
 import { exists } from './fs.js'
 
 export interface TextMessage {
@@ -18,7 +19,7 @@ export interface BreakMessage {
   type: 'break'
 }
 
-export type Message = TextMessage | ImageMessage | BreakMessage
+export type Message = BreakMessage | ImageMessage | TextMessage
 export interface ParseResult {
   path: string
   filename: string
@@ -28,7 +29,7 @@ export interface ParseResult {
 }
 
 export const parseMarkdown: (
-  path: string
+  path: string,
 ) => Promise<ParseResult> = async path => {
   const fileExists = await exists(path)
   if (!fileExists) throw new Error(`"${path}" does not exist`)
@@ -39,6 +40,14 @@ export const parseMarkdown: (
   const [frontmatter, ...chunks] = split
     .map(line => line.trim())
     .filter(line => line !== '')
+
+  if (frontmatter === undefined) {
+    throw new AnnotatedError(
+      'Failed to parse template!',
+      'Frontmatter is missing!',
+      { file: path },
+    )
+  }
 
   const meta = yaml.parse(frontmatter) as Record<string, unknown>
   const messages = chunks
@@ -51,10 +60,10 @@ export const parseMarkdown: (
   return { path, filename, meta, messages }
 }
 
-type ParserFn = (path: string, line: string | Message) => string | Message
+type ParserFn = (path: string, line: Message | string) => Message | string
 type FinalParserFn = (...parameters: Parameters<ParserFn>) => Message
 
-const parseBreakMessage: ParserFn = (path, line) => {
+const parseBreakMessage: ParserFn = (_, line) => {
   if (typeof line !== 'string') return line
   if (line === '::break') {
     return { type: 'break' }
@@ -63,14 +72,17 @@ const parseBreakMessage: ParserFn = (path, line) => {
   return line
 }
 
-const IMAGE_RX = /^!\[(.*)]\((.+)\)$/
+const IMAGE_RX = /^!\[(?<caption>.*)]\((?<url>.+)\)$/
 const parseImageMessage: ParserFn = (path, line) => {
   if (typeof line !== 'string') return line
 
   const matches = IMAGE_RX.exec(line)
   if (matches === null) return line
+  const groups = matches.groups ?? {}
 
-  const [, caption, url] = matches
+  const caption = groups.caption!
+  const url = groups.url!
+
   const isHttp = url.toLowerCase().startsWith('http://')
   const isHttps = url.toLowerCase().startsWith('https://')
   if (isHttp || isHttps) {

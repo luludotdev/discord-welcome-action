@@ -1,6 +1,6 @@
-import * as core from '@actions/core'
 import { readdir as readDir } from 'node:fs/promises'
 import { join as joinPath } from 'node:path'
+import * as core from '@actions/core'
 import { AnnotatedError } from './error.js'
 import { isDirectory } from './fs.js'
 import { parseMarkdown } from './parse.js'
@@ -36,7 +36,7 @@ const run = async () => {
       throw new AnnotatedError(
         'Failed to parse template!',
         'Frontmatter key `channel` is missing!',
-        { file: path }
+        { file: path },
       )
     }
 
@@ -44,7 +44,7 @@ const run = async () => {
       throw new AnnotatedError(
         'Failed to parse template!',
         'Frontmatter key `channel` must be a string!',
-        { file: path }
+        { file: path },
       )
     }
 
@@ -52,7 +52,7 @@ const run = async () => {
       throw new AnnotatedError(
         'Failed to parse template!',
         'Frontmatter key `senderName` must be a string!',
-        { file: path }
+        { file: path },
       )
     }
 
@@ -60,7 +60,7 @@ const run = async () => {
       throw new AnnotatedError(
         'Failed to parse template!',
         'Frontmatter key `senderImage` must be a string!',
-        { file: path }
+        { file: path },
       )
     }
 
@@ -84,6 +84,7 @@ const run = async () => {
   core.endGroup()
 }
 
+// eslint-disable-next-line promise/prefer-await-to-callbacks
 void run().catch((error: unknown) => {
   if (error instanceof AnnotatedError) {
     core.error(error.annotation, error.properties)

@@ -1,4 +1,4 @@
-import { type PathLike } from 'node:fs'
+import type { PathLike } from 'node:fs'
 import { lstat, stat } from 'node:fs/promises'
 
 export const exists: (path: PathLike) => Promise<boolean> = async path => {

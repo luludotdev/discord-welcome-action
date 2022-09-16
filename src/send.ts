@@ -1,3 +1,4 @@
+import { parse } from 'node:path'
 import * as core from '@actions/core'
 import { splitMessage } from '@lolpants/splitmessage'
 import {
@@ -8,9 +9,8 @@ import {
   TextChannel,
   WebhookClient,
 } from 'discord.js'
-import { parse } from 'node:path'
 import { AnnotatedError } from './error.js'
-import { type Message } from './parse.js'
+import type { Message } from './parse.js'
 
 export interface ChannelData {
   path: string
@@ -19,8 +19,8 @@ export interface ChannelData {
   channelID: string
   messages: readonly Message[]
 
-  senderName?: string
-  senderImage?: string
+  senderName: string | undefined
+  senderImage: string | undefined
 }
 
 export const sendMessages: (
@@ -60,12 +60,12 @@ export const sendMessages: (
             channel.guild.roles.everyone,
             {
               ViewChannel: viewChannelPerm,
-            }
+            },
           )
         }
 
         core.info(
-          `Sent ${count} message(s) to #${channel.name} in ${channel.guild.name}`
+          `Sent ${count} message(s) to #${channel.name} in ${channel.guild.name}`,
         )
       }
       /* eslint-enable no-await-in-loop */
@@ -102,7 +102,7 @@ const resolveWebhooks: (
       throw new AnnotatedError(
         'Failed to resolve channel!',
         `Channel ID \`${channelID}\` could not be found!`,
-        { file }
+        { file },
       )
     }
 
@@ -110,7 +110,7 @@ const resolveWebhooks: (
       throw new AnnotatedError(
         'Failed to resolve channel!',
         `Channel ID \`${channelID}\` is not a text channel!`,
-        { file }
+        { file },
       )
     }
 
@@ -122,7 +122,7 @@ const resolveWebhooks: (
       throw new AnnotatedError(
         'Channel permissions are too open!',
         `Channel ID \`${channelID}\` has send messages on for @everyone`,
-        { file }
+        { file },
       )
     }
 
@@ -136,7 +136,7 @@ const resolveWebhooks: (
       channel.guild.iconURL({
         extension: 'png',
         forceStatic: true,
-        size: 2048,
+        size: 2_048,
       }) ??
       undefined
 
@@ -203,7 +203,7 @@ const sendEntry: (entry: WebhookData) => Promise<number> = async ({
       }
 
       case 'text': {
-        const split = splitMessage(message.content, { maxLength: 1950 })
+        const split = splitMessage(message.content, { maxLength: 1_950 })
         if (split.length > 1) {
           core.warning('A message was split due to max length constraints', {
             file,
