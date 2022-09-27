@@ -83,7 +83,6 @@ interface WebhookData extends ChannelData {
   webhook: WebhookClient
   channel: TextChannel
   senderName: string
-  // eslint-disable-next-line @typescript-eslint/ban-types
   viewChannelPerm: boolean | null | undefined
 }
 
