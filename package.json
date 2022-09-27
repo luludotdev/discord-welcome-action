@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@actions/core": "^1.9.1",
+    "@lolpants/eslint-config": "^0.1.1",
     "@lolpants/splitmessage": "^0.2.0",
     "@types/node": "^18.7.18",
     "discord.js": "^14.3.0",
