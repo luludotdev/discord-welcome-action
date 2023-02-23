@@ -98,7 +98,7 @@ const parseImageMessage: ParserFn = (path, line) => {
 const BULLET_RX = /^[*-] /gm
 const translateBulletPoints: ParserFn = (_, line) => {
   if (typeof line !== 'string') return line
-  return line.replace(BULLET_RX, '• ')
+  return line.replaceAll(BULLET_RX, '• ')
 }
 
 const parseTextLine: FinalParserFn = (_, line) => {

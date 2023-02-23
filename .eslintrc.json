@@ -1,12 +1,10 @@
 {
   "root": true,
   "extends": [
-    "neon/common",
-    "neon/node",
-    "neon/typescript",
-    "neon/prettier",
-    "@lolpants/eslint-config/base",
-    "@lolpants/eslint-config/typescript"
+    "@lolpants/eslint-config/common",
+    "@lolpants/eslint-config/node",
+    "@lolpants/eslint-config/typescript",
+    "@lolpants/eslint-config/prettier"
   ],
   "parserOptions": {
     "project": "./tsconfig.eslint.json"

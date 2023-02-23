@@ -20,18 +20,18 @@
     "node": ">=16.9.0"
   },
   "devDependencies": {
-    "@actions/core": "^1.9.1",
-    "@lolpants/eslint-config": "^0.1.1",
+    "@actions/core": "^1.10.0",
+    "@lolpants/eslint-config": "^0.3.2",
     "@lolpants/splitmessage": "^0.2.2",
-    "@types/node": "^18.7.23",
-    "discord.js": "^14.5.0",
-    "eslint": "^8.24.0",
-    "eslint-config-neon": "^0.1.33",
-    "husky": "^8.0.1",
-    "prettier": "^2.7.1",
-    "rimraf": "^3.0.2",
-    "tsup": "^6.2.3",
-    "typescript": "^4.8.3",
-    "yaml": "^2.1.1"
+    "@types/node": "^18.14.1",
+    "discord.js": "^14.7.1",
+    "eslint": "^8.34.0",
+    "eslint-config-neon": "^0.1.40",
+    "husky": "^8.0.3",
+    "prettier": "^2.8.4",
+    "rimraf": "^4.1.2",
+    "tsup": "^6.6.3",
+    "typescript": "^4.9.5",
+    "yaml": "^2.2.1"
   }
 }
