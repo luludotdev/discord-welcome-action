@@ -1,10 +1,10 @@
-# Discord Welcome Action [![Node.js CI](https://github.com/lolPants/discord-welcome-action/actions/workflows/ci.yml/badge.svg)](https://github.com/lolPants/discord-welcome-action/actions/workflows/ci.yml) [![Action Test](https://github.com/lolPants/discord-welcome-action/actions/workflows/test.yml/badge.svg)](https://github.com/lolPants/discord-welcome-action/actions/workflows/test.yml)
+# Discord Welcome Action [![Node.js CI](https://github.com/luludotdev/discord-welcome-action/actions/workflows/ci.yml/badge.svg)](https://github.com/luludotdev/discord-welcome-action/actions/workflows/ci.yml) [![Action Test](https://github.com/luludotdev/discord-welcome-action/actions/workflows/test.yml/badge.svg)](https://github.com/luludotdev/discord-welcome-action/actions/workflows/test.yml)
 
 > Action to keep channel content in-sync with Markdown based templates
 
 ## Stability
 
-This action is tested on every push with a [Test Workflow](https://github.com/lolPants/discord-welcome-action/actions/workflows/test.yml) to ensure things function as expected.
+This action is tested on every push with a [Test Workflow](https://github.com/luludotdev/discord-welcome-action/actions/workflows/test.yml) to ensure things function as expected.
 However it has not been extensively battle-tested with many different inputs and configurations so please report any issues you may find.
 
 ## Prerequisites
@@ -31,7 +31,7 @@ Images will also be embedded correctly, however **images must be in a message of
 
 Finally, bulleted lists will be transformed to use the Unicode bullet character.
 
-_You can see an example of the syntax [here](https://raw.githubusercontent.com/lolPants/discord-welcome-action/master/test-content/welcome.md)._
+_You can see an example of the syntax [here](https://raw.githubusercontent.com/luludotdev/discord-welcome-action/master/test-content/welcome.md)._
 
 #### Frontmatter
 
@@ -56,7 +56,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Update Welcome
-        uses: lolPants/discord-welcome-action@v1
+        uses: luludotdev/discord-welcome-action@v1
         with:
           content: ./content
           discord-token: ${{ secrets.DISCORD_TOKEN }}

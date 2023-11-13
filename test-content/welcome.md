@@ -3,7 +3,7 @@ channel: '963550442300796958'
 ---
 ![Relative Banner Image](./banner.png)
 ---
-Test for `lolPants/discord-welcome-action`
+Test for `luludotdev/discord-welcome-action`
 
 * A
 * B
