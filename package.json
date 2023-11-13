@@ -1,6 +1,5 @@
 {
   "name": "discord-welcome-action",
-  "packageManager": "yarn@3.4.1",
   "repository": "git@github.com:lolPants/discord-welcome-action.git",
   "author": "Jack Baron <jackmbaron@gmail.com>",
   "private": true,
@@ -9,12 +8,12 @@
     "postinstall": "husky install",
     "lint": "prettier --check . && eslint src --ext mjs,js,ts",
     "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
-    "fmt": "yarn run format",
-    "test": "yarn run lint",
-    "dev": "yarn run tsc --watch",
+    "fmt": "npm run format",
+    "test": "npm run lint",
+    "dev": "npm run tsc -- --watch",
     "clean": "rimraf dist",
-    "package": "yarn run clean && tsup",
-    "dist": "yarn run test && yarn run package"
+    "package": "npm run clean && tsup",
+    "dist": "npm run test && npm run package"
   },
   "engines": {
     "node": ">=16.9.0"
