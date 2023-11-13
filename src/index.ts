@@ -4,7 +4,8 @@ import * as core from '@actions/core'
 import { AnnotatedError } from './error.js'
 import { isDirectory } from './fs.js'
 import { parseMarkdown } from './parse.js'
-import { type ChannelData, sendMessages } from './send.js'
+import { sendMessages } from './send.js'
+import type { ChannelData } from './send.js'
 
 const run = async () => {
   const token = core.getInput('discord-token', { required: true })

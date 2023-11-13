@@ -16,7 +16,7 @@
 
     // Modules
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
 
     // Emit
@@ -24,7 +24,6 @@
     "declarationMap": false,
     "importHelpers": false,
     "noEmitHelpers": false,
-    "importsNotUsedAsValues": "error",
     "inlineSources": true,
     "newLine": "lf",
     "outDir": "dist",

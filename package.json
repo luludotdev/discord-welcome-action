@@ -1,36 +1,35 @@
 {
   "name": "discord-welcome-action",
-  "repository": "git@github.com:lolPants/discord-welcome-action.git",
+  "repository": "git@github.com:luludotdev/discord-welcome-action.git",
   "author": "Jack Baron <jackmbaron@gmail.com>",
   "private": true,
   "license": "APACHE-2.0",
   "scripts": {
     "postinstall": "husky install",
-    "lint": "prettier --check . && eslint src --ext mjs,js,ts",
-    "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
+    "build": "tsup",
+    "dev": "npm run build -- --watch",
+    "check": "tsc --noEmit --skipLibCheck",
+    "lint": "prettier --check . && eslint src --ext ts",
+    "format": "prettier --write . && eslint src --ext ts --fix",
     "fmt": "npm run format",
-    "test": "npm run lint",
-    "dev": "npm run tsc -- --watch",
-    "clean": "rimraf dist",
-    "package": "npm run clean && tsup",
-    "dist": "npm run test && npm run package"
+    "test": "npm run check && npm run lint",
+    "dist": "npm run test && npm run build"
   },
   "engines": {
     "node": ">=16.9.0"
   },
   "devDependencies": {
-    "@actions/core": "^1.10.0",
-    "@lolpants/eslint-config": "^0.3.2",
-    "@lolpants/splitmessage": "^0.2.2",
-    "@types/node": "^18.14.1",
-    "discord.js": "^14.7.1",
-    "eslint": "^8.34.0",
-    "eslint-config-neon": "^0.1.40",
+    "@actions/core": "^1.10.1",
+    "@luludev/eslint-config": "^0.5.1",
+    "@luludev/splitmessage": "^0.2.3",
+    "@types/node": "^20.9.0",
+    "discord.js": "^14.14.1",
+    "eslint": "^8.53.0",
     "husky": "^8.0.3",
-    "prettier": "^2.8.4",
-    "rimraf": "^4.1.2",
-    "tsup": "^6.6.3",
-    "typescript": "^4.9.5",
-    "yaml": "^2.2.1"
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "yaml": "^2.3.4"
   }
 }

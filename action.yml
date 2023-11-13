@@ -9,7 +9,7 @@ inputs:
     description: Path to a directory containing template documents
     default: ./content
 runs:
-  using: node16
+  using: node20
   main: dist/index.js
 branding:
   icon: edit

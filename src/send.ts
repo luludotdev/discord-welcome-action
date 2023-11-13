@@ -1,6 +1,6 @@
 import { parse } from 'node:path'
 import * as core from '@actions/core'
-import { splitMessage } from '@lolpants/splitmessage'
+import { splitMessage } from '@luludev/splitmessage'
 import {
   AttachmentBuilder,
   Client,
@@ -75,7 +75,7 @@ export const sendMessages: (
       }
     }
   } finally {
-    client.destroy()
+    await client.destroy()
   }
 }
 
